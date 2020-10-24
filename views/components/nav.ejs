@@ -1,0 +1,41 @@
+<nav class="uk-navbar-container" uk-navbar="boundary-align: true;" style="background: none!important;">
+    <div class="uk-navbar-left">
+    <% if ( typeof guest !== "undefined" ) { %>
+        <ul class="uk-navbar-nav">
+            <li>
+                <img src="/assets/logo.png" alt="Ticket logo" width="40" style="display: inline-block; margin: 15px;">
+                <a style="display: inline-block;" href="/">BACK TO HOME</a>
+            </li>
+        </ul>
+    </div>
+    <% } else { %>
+    <ul class="uk-navbar-nav">
+        <li <% if ( typeof events !== "undefined") { %> class="uk-active" <% } %>>
+            <a href="/events">EVENTS</a>
+        </li>
+        <li <% if ( typeof profile !== "undefined") { %> class="uk-active" <% } %>>
+            <a href="/profile">PROFILE</a>
+        </li>
+        <% if (user.role === 'admin') { %>
+        <li <% if (typeof admin !== 'undefined') { %> class="uk-active" <% } %>><a href="/admin">ADMIN</a></li>
+        <% } %>
+        <li><a href="/logout">LOGOUT</a></li>
+    </ul>
+
+    </div>
+    <div class="uk-navbar-center" id="logo">
+        <a href="/dashboard">
+            <img src="/assets/logo.png" alt="Ticket logo" width="40">
+        </a>
+    </div>
+
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            <li style="padding-right: 10px;">
+                <span><%= user.name %></span>
+            </li>
+        </ul>
+    </div>
+    <% } %>
+
+</nav>

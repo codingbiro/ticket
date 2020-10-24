@@ -1,0 +1,31 @@
+<%- include('components/header', {title: "Orders"}); %>
+<%- include('components/nav', { guest: true }); %>
+<div class="uk-container" style="padding-top: 40px;">
+  <% if ( sessionFlash && sessionFlash.message) { %>
+  <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p><%= sessionFlash.message %></p>
+  </div>
+  <% } %>
+</div>
+
+<div style="min-height: 70vh; text-align: center; padding-top: 5vh; margin: auto; max-width: 1000px;">
+  <div class="uk-child-width-expand@1-3 uk-text-center" uk-grid>
+    <% orders.forEach(function(order){ %>
+    <div class="uk-card uk-card-default uk-card-body">
+      <h1>Lesson from <%= order.title %></h1>
+      <h3> Status: <%= order.state %><br />
+        <!--a href="/refreshOrder/?paymentId=<%= order.pid%>">Refresh</a-->
+        Total: € <%= order.total %></h3>
+      <small> Transaction number: <%= order.pid %><br />Timestamp: <%= order.start %><br />Lesson ID:
+        <%= order.lid %></small>
+    </div>
+    <% }); %>
+    <% if ( orders.length === 0) { %>
+    <h2>Such emptiness.</h2>
+    <% } %>
+  </div>
+
+</div>
+
+<%- include ('components/footer') %>

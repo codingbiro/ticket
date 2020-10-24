@@ -1,0 +1,15 @@
+<%- include('components/header', {title: "Thanks"}); %>
+<%- include('components/nav', {guest: true}); %>
+<div class="uk-container uk-container-xsmall" style="padding-top: 10%;">
+  <% if ( sessionFlash && sessionFlash.message) { %>
+  <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p><%= sessionFlash.message %></p>
+  </div>
+  <% } %>
+  <h1>Thank you!</h1>
+  <p>
+    Your ticket(s) will appear as soon as the payment is processed. If your ticket(s) do not arrive in 1 hr, please contact the support.
+  </p>
+</div>
+<%- include ('components/footer') %>

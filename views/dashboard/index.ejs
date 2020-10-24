@@ -1,0 +1,14 @@
+<%- include('../components/header', {title: "Dashboard"}); %>
+<%- include('../components/nav', {dashboard: "active"}); %>
+<div class="uk-container uk-container-xsmall" style="padding-top: 10%;">
+  <% if ( sessionFlash && sessionFlash.message) { %>
+  <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p><%= sessionFlash.message %></p>
+  </div>
+  <% } %>
+  <div style="height: 60vh;">
+    <h1> Welcome, <%= user.name %> </h1>
+  </div>
+</div>
+<%- include('../components/footer') %>

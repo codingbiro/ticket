@@ -1,0 +1,29 @@
+<%- include('components/header', {title: "Home"}); %>
+<% if ( sessionFlash && sessionFlash.message) { %>
+<div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+  <a class="uk-alert-close" uk-close></a>
+  <p><%= sessionFlash.message %></p>
+</div>
+<% } %>
+<div style="height: 65vh; text-align: center; padding-top: 25vh;">
+  <img src="/assets/logo.png" width="300" alt="endorsebank">
+
+  <form style="margin-top: 5vh; text-align: center;" method="POST">
+    <div class="uk-margin">
+      <div class="uk-inline">
+        <span class="uk-form-icon" uk-icon="icon: user"></span>
+        <input class="uk-input" name="email" type="email" required>
+      </div>
+    </div>
+    <div class="uk-margin">
+      <div class="uk-inline">
+        <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+        <input class="uk-input" name="password" type="password" required>
+      </div>
+    </div>
+    <input type="image" src="/assets/icons8-fingerprint-48.png" width="48" alt="login" style="margin-top: 1vh;">
+  </form>
+  <a href="/iforgot" style="float: right; margin-right: 30px;">I forgot<img src="/assets/icons8-forgot-password-64.png" width="48" alt="Lost password"></a>
+  <a href="/register" style="float: left; margin-left: 30px;"><img src="/assets/icons8-add-user-male-64.png" width="48" alt="Sign up">Sign up</a>
+</div>
+<%- include ('components/footer') %>

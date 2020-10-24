@@ -1,0 +1,28 @@
+<%- include('components/header', {title: "I forgot"}); %>
+<%- include('components/nav', {guest: true}); %>
+<div class="uk-container uk-container-xsmall" style="padding-top: 10%;">
+    <% if ( sessionFlash && sessionFlash.message) { %>
+    <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+        <a class="uk-alert-close" uk-close></a>
+        <p><%= sessionFlash.message %></p>
+    </div>
+    <% } %>
+    <div style="height: 60vh;">
+        <dl class="uk-description-list uk-description-list-divider" style="padding: 40px 0px; text-align: center;">
+            <dt>LOST PASSWORD</dt>
+            <br />
+            <dd>You can request for a password reset. Fill out the e-mail field and click the button below.</dd>
+            <br />
+            <form style="text-align: center;" method="POST">
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-icon" uk-icon="icon: user"></span>
+                        <input class="uk-input" type="email" name="resetemail" placeholder="E-mail" required>
+                    </div>
+                </div>
+                <input type="submit" class="uk-button uk-button-default" value="Reset password">
+            </form>
+        </dl>
+    </div>
+</div>
+<%- include('components/footer') %>

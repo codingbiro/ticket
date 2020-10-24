@@ -1,0 +1,57 @@
+<%- include('components/header', {title: "Profile"}); %>
+<%- include('components/nav', {profile: "active"}); %>
+<div class="uk-container uk-container-xsmall" style="padding-top: 40px; min-height: 70vh;">
+  <% if ( sessionFlash && sessionFlash.message) { %>
+  <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p><%= sessionFlash.message %></p>
+  </div>
+  <% } %>
+
+  <div class="uk-width-1-1@s uk-text-center uk-margin">
+    <a href="/orders" class="uk-button uk-button-primary">
+      VIEW ORDER HISTORY
+    </a>
+  </div>
+
+  <form class="uk-grid-small" uk-grid style="margin-top: 8%;" method="POST" enctype="multipart/form-data">
+    <div class="uk-width-1-1">
+      <input class="uk-input" type="text" maxlength="95" name="desc" value="<%= user.desc ? user.desc : '' %>"
+        placeholder="<%= user.desc ? '' : 'Your description' %>">
+    </div>
+    <div class="uk-width-1-2@s">
+      <input class="uk-input" type="text" name="name" value="<%= user.name %>" required>
+    </div>
+    <div class="uk-width-1-2@s">
+      <input class="uk-input" type="text" value="<%= user.email %>" disabled>
+    </div>
+    <div class="uk-width-1-4@s">
+      <input class="uk-input" type="text" name="company" value="<%= user.company ? user.company : '' %>"
+        placeholder="<%= user.company ? '' : 'Your company' %>" disabled>
+    </div>
+    <div class="uk-width-1-4@s">
+      <input class="uk-input" type="text" name="city" value="<%= user.city ? user.city : '' %>"
+        placeholder="<%= user.city ? '' : 'Your city' %>">
+    </div>
+    <div uk-form-custom="target: true" uk-tooltip="title: Accepted file types: png/jpg/jpeg; pos: right">
+      <img src="<%= user.img ? user.img : 'assets/avatar-placeholder.gif' %>" width="30" alt="<%= user.name %>'s profile picture" />
+      <input type="file" name="img">
+      <input class="uk-input uk-form-width-small" type="text" placeholder="Upload here" autocomplete="false">
+      <div class="uk-text-small uk-inline">Your picture</div>
+    </div>
+    <div class="uk-width-1-3@s uk-text-center" style="line-height: 40px;">
+      Change your password:
+    </div>
+    <div class="uk-width-1-3@s">
+      <input class="uk-input" type="password" minlength="6" name="pass1" placeholder="Password" autocomplete="false">
+    </div>
+    <div class="uk-width-1-3@s">
+      <input class="uk-input" type="password" minlength="6" name="pass2" placeholder="Password again" autocomplete="false">
+    </div>
+    <div class="uk-width-1-1@s uk-text-center uk-margin">
+      <input type="submit" value="Save changes" class="uk-button uk-button-secondary">
+    </div>
+  </form>
+
+</div>
+<%- include ('components/footer') %>
