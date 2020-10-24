@@ -1,0 +1,71 @@
+<%- include('components/header', { title: "Admin" }); %>
+<%- include('components/nav', { }); %>
+<div class="uk-container" style="padding-top: 40px;">
+    <% if ( sessionFlash && sessionFlash.message) { %>
+    <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+        <a class="uk-alert-close" uk-close></a>
+        <p><%= sessionFlash.message %></p>
+    </div>
+    <% } %>
+</div>
+
+<div style="min-height: 70vh; text-align: center; padding-top: 5vh; margin: auto; max-width: 1000px;">
+
+    <h3>
+        EDITING <span><%= event.title %></span>
+    </h3>
+
+    <h3>
+        ADD TICKET CATEGORY
+    </h3>
+
+    <p>
+        <a href="/admin/event/<%= event._id %>/add">
+            <img src="/assets/icons8-add-64.png" alt="Add product">
+        </a>
+    </p>
+
+    <h3>
+        TICKET CATEGORIES
+    </h3>
+
+    <div class="uk-child-width-1-3@m uk-grid-small uk-grid-match" uk-grid>
+        <% ticketCategories.forEach(function(ticketCategory){ %>
+        <div style="position: relative; margin-right: 1%; width: 30%;">
+            <% if (!ticketCategory.enabled) { %>
+            <div
+                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.8); z-index: 2;">
+                <h4 style="color: white; padding-top: 1vh;">
+                    DISABLED
+                </h4>
+            </div>
+            <% } %>
+            <div class="uk-card uk-card-default uk-card-body">
+                <h3 class="uk-card-title">
+                    <%= ticketCategory.title %>
+                </h3>
+                <p>
+                    <span><%= ticketCategory.price %></span>
+                    <img src="/assets/icons8-coin-48.png" width="24" alt="balance in coins"
+                        style="vertical-align: sub;">
+                </p>
+                <% if (ticketCategory.enabled) { %>
+                <a href="/disableTc/<%= ticketCategory._id %>" class="uk-button uk-button-danger uk-margin" style="margin-bottom: 0px;">DISABLE</a>
+                <% } %>
+                <% if (!ticketCategory.activated) { %>
+                    <a href="/admin/event/<%= event._id %>/<%= ticketCategory._id %>" class="uk-button uk-button-danger uk-margin" style="margin-bottom: 0px;">ACTIVATE</a>
+                <% } %>
+            </div>
+            <% if (!ticketCategory.enabled) { %>
+            <a href="/enableTc/<%= ticketCategory._id %>" class="uk-button uk-button-primary uk-margin"
+                style="z-index: 3; margin-left: -15px; margin-bottom: 0px; height: 40px; position: absolute; bottom: 40px;">ENABLE</a>                
+            <% } %>
+        </div>
+        <% }); %>
+    </div>
+    <% if (ticketCategories.length === 0) { %>
+        <P>No ticketCategories</p>
+    <% } %>
+</div>
+
+<%- include ('components/footer') %>

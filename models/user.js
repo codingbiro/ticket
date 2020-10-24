@@ -7,6 +7,10 @@ const User = db.model('User', {
   password: String,
   address: String,
   company: String,
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
   _tickets: [{
     type: Schema.Types.ObjectId,
     ref: 'Ticket',

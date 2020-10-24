@@ -25,7 +25,7 @@ module.exports = function resetPass(objectrepository) {
         }
 
         // TODO Link
-        const url = `https://endorse.biro.wtf/resetpassword/${result._id}`;
+        const url = `https://ticket.biro.wtf/resetpassword/${result._id}`;
 
         const transporter = nodemailer.createTransport({
           host: 'smtp.eu.mailgun.org',

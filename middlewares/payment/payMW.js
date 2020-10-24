@@ -8,67 +8,89 @@ const PRIVATE_POS_KEY = process.env.NODE_ENV ? process.env.BARION_API_KEY : '8cd
 const START = 'v2/payment/start';
 
 module.exports = function pay(objectrepository) {
-  const { orderModel } = objectrepository;
+  const { orderModel, ticketCategoryModel } = objectrepository;
+
+  // TODO Return values etc
 
   return function payMW(req, res, next) {
-    const thecoins = Number(req.params.coins);
-    let thetotal = 0;
+    const { ticketCategoryId } = req.params;
+    const quantity = Number(req.body.quantity);
+    if (!quantity || quantity === 0) {
+      req.session.sessionFlash = {
+        type: 'danger',
+        message: 'Req error.',
+      };
 
-    switch (thecoins) {
-      case 10000: thetotal = 100; break;
-      case 25000: thetotal = 200; break;
-      default: req.session.sessionFlash = { type: 'danger', message: 'Invalid request.' }; return res.redirect('/admin');
+      return next('Req error');
     }
 
-    const InputProperties = {
-      POSKey: PRIVATE_POS_KEY,
-      PaymentType: 'Immediate',
-      GuestCheckOut: 'true',
-      FundingSources: ['All'],
-      PaymentRequestId: req.session.user._id,
-      RedirectUrl: 'https://endorse.biro.wtf/thanks', // TODO links
-      CallbackUrl: 'https://endorse.biro.wtf/cb',
-      Transactions: [{
-        POSTransactionId: req.session.user._id,
-        Payee: 'quick.biro@gmail.com',
-        Total: thetotal,
-        Items: [
-          {
-            Name: 'Coin package',
-            Description: thecoins,
-            Quantity: 1,
-            Unit: 'db',
-            UnitPrice: thetotal,
-            ItemTotal: thetotal,
-          },
-        ],
-      }],
-      Locale: 'hu-HU',
-      Currency: 'EUR',
-    };
+    ticketCategoryModel.findOne({ _id: ticketCategoryId }, (err, ticketCategory) => {
+      if (err) {
+        return next(err);
+      }
+      if (!ticketCategory || !ticketCategory.enabled) {
+        return next('Bad request');
+      }
+      let thetotal = 0;
 
-    axios.post(BASE_URL + START, InputProperties, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      orderModel.create({
-        title: 'Coin package', desc: thecoins, state: response.data.Status, total: thetotal, pid: response.data.PaymentId, _user: req.session.user._id,
-      }, (err) => {
-        if (err) {
-          req.session.sessionFlash = {
-            type: 'danger',
-            message: 'DB error.',
-          };
+      const { desc, price, title } = ticketCategory;
+      thetotal = price * quantity;
 
-          return next(err);
-        }
+      const InputProperties = {
+        POSKey: PRIVATE_POS_KEY,
+        PaymentType: 'Immediate',
+        GuestCheckOut: 'true',
+        FundingSources: ['All'],
+        PaymentRequestId: req.session.user._id,
+        RedirectUrl: 'http://ticket.biro.wtf/thanks', // TODO links
+        CallbackUrl: 'https://ticket.biro.wtf/cb',
+        Transactions: [{
+          POSTransactionId: req.session.user._id,
+          Payee: 'quick.biro@gmail.com', // TODO payee
+          Total: thetotal,
+          Items: [
+            {
+              Name: title,
+              Description: desc,
+              Quantity: quantity,
+              Unit: 'db',
+              UnitPrice: price,
+              ItemTotal: thetotal,
+            },
+          ],
+        }],
+        Locale: 'hu-HU',
+        Currency: 'HUF',
+      };
+
+      axios.post(BASE_URL + START, InputProperties, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+        orderModel.create({
+          title,
+          desc,
+          state: response.data.Status,
+          total: thetotal,
+          quantity,
+          pid: response.data.PaymentId,
+          _user: req.session.user._id,
+        }, (errr) => {
+          if (errr) {
+            req.session.sessionFlash = {
+              type: 'danger',
+              message: 'DB error.',
+            };
+
+            return next(errr);
+          }
+        });
+        return res.redirect(response.data.GatewayUrl);
+      }).catch((error) => {
+        console.error(error);
+        return next(error);
       });
-      return res.redirect(response.data.GatewayUrl);
-    }).catch((error) => {
-      console.error(error);
-      return next(error);
     });
-    return next('error');
   };
 };

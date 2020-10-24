@@ -8,6 +8,7 @@ const Order = db.model('Order', {
   pid: String,
   title: String,
   desc: String,
+  quantity: Number,
   _user: {
     type: Schema.Types.ObjectId,
     ref: 'User',

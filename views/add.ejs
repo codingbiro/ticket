@@ -8,28 +8,28 @@
   </div>
   <% } %>
   <h2>
-    Adding a new Product
+    Adding a new Event
   </h2>
   <form class="uk-grid-small" uk-grid style="margin-top: 1%;" method="POST" enctype="multipart/form-data">
     <div class="uk-width-1-1">
-      <input class="uk-input" type="text" maxlength="95" name="desc" placeholder="Product description">
+      <input class="uk-input" type="text" name="title" placeholder="Event's title" required>
     </div>
     <div class="uk-width-1-1">
-      <input class="uk-input" type="text" name="title" placeholder="Product title" required>
+      <input class="uk-input" type="text" maxlength="95" name="desc" placeholder="Event's description" required>
     </div>
     <div class="uk-width-1-4@s">
-      <input class="uk-input" type="number" name="price" placeholder="Product price" required>
+      <input class="uk-input" type="text" name="price" placeholder="Event's price" required>
     </div>
     <div class="uk-width-1-4@s">
-      <input class="uk-input" type="number" name="quantity" placeholder="Product's quantity" required>
+      <input class="uk-input" type="date" name="date" placeholder="Event's date" min="<%= timeNow() %>" required>
     </div>
     <div uk-form-custom="target: true" uk-tooltip="title: Accepted file types: png/jpg/jpeg; pos: right">
       <input type="file" name="img">
       <input class="uk-input uk-form-width-small" type="text" placeholder="Upload here" autocomplete="false">
-      <div class="uk-text-small uk-inline">Product's picture</div>
+      <div class="uk-text-small uk-inline">Event's picture</div>
     </div>
     <div class="uk-width-1-1@s uk-text-center uk-margin">
-      <input type="submit" value="Add product" class="uk-button uk-button-secondary">
+      <input type="submit" value="Add event" class="uk-button uk-button-secondary">
     </div>
   </form>
 

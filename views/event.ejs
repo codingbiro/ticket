@@ -1,0 +1,55 @@
+<%- include('components/header', { title: "Event" }); %>
+<%- include('components/nav', {}); %>
+<div class="uk-container uk-container-xsmall" style="padding-top: 40px;">
+  <% if ( sessionFlash && sessionFlash.message) { %>
+  <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p><%= sessionFlash.message %></p>
+  </div>
+  <% } %>
+  <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid
+    style="margin-bottom: 40px;">
+    <div class="uk-card-media-left uk-cover-container" style="background-color: cyan;">
+      <img src="/<%= event.img ? event.img : 'assets/event_placeholder.png' %>" alt="" uk-cover>
+      <canvas width="600" height="400"></canvas>
+    </div>
+    <div>
+      <div class="uk-card-body">
+        <h3 class="uk-card-title"><%= event.title %></h3>
+          <div class="uk-card-badge uk-label">Hot!</div>
+        <p><%= event.desc %></p>
+      </div>
+    </div>
+  </div>
+  <dl class="uk-description-list uk-description-list-divider">
+    <dt>Date</dt>
+    <dd><%= event.date.toLocaleDateString('hu-HU') %></dd>
+  </dl>
+  <div>
+    <h2 class="uk-modal-title">Available tickets</h2>
+      <table class="uk-table uk-table-divider">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Desc</th>
+                <th>Price</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+      <% ticketCategories.forEach(function(ticketCategory){ %>
+          <tr>
+            <td><%= ticketCategory.title %></td>
+            <td><%= ticketCategory.desc %></td>
+            <td><%= ticketCategory.price %></td>
+            <td><a href="/buy/<%= event._id %>/<%= ticketCategory._id %>"><button class="uk-button uk-button-primary uk-button-small">Buy</button></a></td>
+          </tr>
+      <% }); %>
+        </tbody>
+      </table>
+      <% if ( ticketCategories.length === 0) { %>
+        <h2>No tickets.</h2>
+      <% } %>
+  </div>
+</div>
+<%- include ('components/footer') %>

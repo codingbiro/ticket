@@ -10,13 +10,13 @@
     </div>
     <% } else { %>
     <ul class="uk-navbar-nav">
-        <li <% if ( typeof events !== "undefined") { %> class="uk-active" <% } %>>
+        <li <% if ( typeof eventsTab !== "undefined") { %> class="uk-active" <% } %>>
             <a href="/events">EVENTS</a>
         </li>
         <li <% if ( typeof profile !== "undefined") { %> class="uk-active" <% } %>>
             <a href="/profile">PROFILE</a>
         </li>
-        <% if (user.role === 'admin') { %>
+        <% if (user.isAdmin) { %>
         <li <% if (typeof admin !== 'undefined') { %> class="uk-active" <% } %>><a href="/admin">ADMIN</a></li>
         <% } %>
         <li><a href="/logout">LOGOUT</a></li>

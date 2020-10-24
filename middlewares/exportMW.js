@@ -43,7 +43,7 @@ module.exports = function exportFn(objectrepository) {
 
           // const filea = `${__dirname}/exports/${fileName}`;
           // TODO
-          return res.download(`/var/www/endorse/exports/${fileName}`, (errrr) => {
+          return res.download(`/var/www/ticket/exports/${fileName}`, (errrr) => {
             if (errrr) {
               console.log(errrr);
 

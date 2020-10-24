@@ -1,3 +1,4 @@
+const { Schema } = require('mongoose');
 const db = require('../config/db');
 
 const Event = db.model('Event', {
@@ -8,15 +9,15 @@ const Event = db.model('Event', {
   date: Date,
   disabled: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  _tickets: [{
+  _ticketCategory: [{
     type: Schema.Types.ObjectId,
-    ref: 'Ticket',
+    ref: 'TicketCategory',
   }],
 });
 

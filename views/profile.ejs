@@ -14,39 +14,28 @@
     </a>
   </div>
 
-  <form class="uk-grid-small" uk-grid style="margin-top: 8%;" method="POST" enctype="multipart/form-data">
+  <form class="uk-grid-small" uk-grid style="margin-top: 8%;" method="POST" enctype="multipart/form-data">    
     <div class="uk-width-1-1">
-      <input class="uk-input" type="text" maxlength="95" name="desc" value="<%= user.desc ? user.desc : '' %>"
-        placeholder="<%= user.desc ? '' : 'Your description' %>">
+      <small>Address</small>
+      <input class="uk-input" type="text" maxlength="95" name="address" value="<%= user.address ? user.address : '' %>"
+        placeholder="<%= user.address ? '' : 'Your address' %>">
     </div>
     <div class="uk-width-1-2@s">
+      <small>Name</small>
       <input class="uk-input" type="text" name="name" value="<%= user.name %>" required>
     </div>
     <div class="uk-width-1-2@s">
+      <small>Email</small>
       <input class="uk-input" type="text" value="<%= user.email %>" disabled>
     </div>
-    <div class="uk-width-1-4@s">
+    <div class="uk-width-1-2@s">
+      <small>Company (optional)</small>
       <input class="uk-input" type="text" name="company" value="<%= user.company ? user.company : '' %>"
-        placeholder="<%= user.company ? '' : 'Your company' %>" disabled>
+        placeholder="<%= user.company ? '' : 'Your company' %>">
     </div>
-    <div class="uk-width-1-4@s">
-      <input class="uk-input" type="text" name="city" value="<%= user.city ? user.city : '' %>"
-        placeholder="<%= user.city ? '' : 'Your city' %>">
-    </div>
-    <div uk-form-custom="target: true" uk-tooltip="title: Accepted file types: png/jpg/jpeg; pos: right">
-      <img src="<%= user.img ? user.img : 'assets/avatar-placeholder.gif' %>" width="30" alt="<%= user.name %>'s profile picture" />
-      <input type="file" name="img">
-      <input class="uk-input uk-form-width-small" type="text" placeholder="Upload here" autocomplete="false">
-      <div class="uk-text-small uk-inline">Your picture</div>
-    </div>
-    <div class="uk-width-1-3@s uk-text-center" style="line-height: 40px;">
-      Change your password:
-    </div>
-    <div class="uk-width-1-3@s">
-      <input class="uk-input" type="password" minlength="6" name="pass1" placeholder="Password" autocomplete="false">
-    </div>
-    <div class="uk-width-1-3@s">
-      <input class="uk-input" type="password" minlength="6" name="pass2" placeholder="Password again" autocomplete="false">
+    <div class="uk-width-1-2@s">
+      <small>Password</small><br />
+      <a href="/iforgot" style="line-height: 40px;">Click here to change your password</a>
     </div>
     <div class="uk-width-1-1@s uk-text-center uk-margin">
       <input type="submit" value="Save changes" class="uk-button uk-button-secondary">

@@ -2,6 +2,20 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 const randomize = require('randomatic');
 
+function timeNow(separator = '-') {
+  const d = new Date(Date.now());
+  let date = d.toLocaleDateString('hu-HU');
+  date = date.replace(/(\.)/g, '');
+  return date.replace(/ /g, separator);
+}
+
+function isUpcoming(date) {
+  const now = new Date(Date.now());
+  const d = new Date(date);
+  const oneDay = (1000 * 60 * 60 * 24); // 1 day in ms
+  return now.getTime() <= (d.getTime() + oneDay);
+}
+
 function hashCode(id) {
   const str = `${id.toString()}aa`;
   let hash = 0;
@@ -174,4 +188,6 @@ module.exports = {
   isExpired,
   sendMail,
   generateCodes,
+  timeNow,
+  isUpcoming,
 };

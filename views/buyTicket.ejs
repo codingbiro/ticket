@@ -1,0 +1,28 @@
+<%- include('components/header', { title: "Add Ticket Category" }); %>
+<%- include('components/nav', { }); %>
+<div class="uk-container uk-container-xsmall" style="padding-top: 40px; min-height: 70vh;">
+  <% if ( sessionFlash && sessionFlash.message) { %>
+  <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p><%= sessionFlash.message %></p>
+  </div>
+  <% } %>
+  <h2>
+    Buying tickets for <%= event.title %> 
+  </h2>
+  <h3>
+    Ticket category: <%= ticketCategory.title %> <br />
+    Ticket category's price: <%= ticketCategory.price %>
+  </h3>
+  <form class="uk-grid-small" uk-grid style="margin-top: 1%;" method="POST" enctype="multipart/form-data">
+    Quantity
+    <div class="uk-width-1-1@s">
+      <input class="uk-input" type="number" name="quantity" placeholder="How many tickets you want?" required>
+    </div>
+    <div class="uk-width-1-1@s uk-text-center uk-margin">
+      <input type="submit" value="Buy tickets" class="uk-button uk-button-secondary">
+    </div>
+  </form>
+
+</div>
+<%- include ('components/footer') %>

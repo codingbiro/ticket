@@ -1,3 +1,5 @@
+const utils = require('../../misc/utils');
+
 module.exports = function getEvents(objectrepository) {
   const { eventModel } = objectrepository;
 
@@ -8,7 +10,7 @@ module.exports = function getEvents(objectrepository) {
       }
 
       const safeEvents = [];
-      for (const event of events) {
+      events.forEach((event) => {
         if (!event.disabled) {
           safeEvents.push({
             _id: event._id,
@@ -19,9 +21,10 @@ module.exports = function getEvents(objectrepository) {
             date: event.date,
           });
         }
-      }
+      });
 
       res.locals.events = safeEvents;
+      res.locals.isUpcoming = utils.isUpcoming;
 
       return next();
     });

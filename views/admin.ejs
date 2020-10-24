@@ -1,5 +1,5 @@
-<%- include('components/header', {title: "Admin"}); %>
-<%- include('components/nav', {admin: "active" }); %>
+<%- include('components/header', { title: "Admin" }); %>
+<%- include('components/nav', { admin: "active" }); %>
 <div class="uk-container" style="padding-top: 40px;">
     <% if ( sessionFlash && sessionFlash.message) { %>
     <div class="uk-alert-<%= sessionFlash.type %>" uk-alert>
@@ -11,18 +11,8 @@
 
 <div style="min-height: 70vh; text-align: center; padding-top: 5vh; margin: auto; max-width: 1000px;">
 
-    <h2>
-        BUY COINS
-    </h2>
-
-    <p>
-        <a href="/buy">
-            <img src="/assets/icons8-buy-upgrade-64.png" alt="Buy coins">
-        </a>
-    </p>
-
     <h3>
-        ADD PRODUCT
+        ADD EVENT
     </h3>
 
     <p>
@@ -32,13 +22,13 @@
     </p>
 
     <h3>
-        PRODUCTS
+        EVENTS
     </h3>
 
     <div class="uk-child-width-1-3@m uk-grid-small uk-grid-match" uk-grid>
-        <% redeemables.forEach(function(redeemable){ %>
+        <% events.forEach(function(event){ %>
         <div style="position: relative; margin-right: 1%; width: 30%;">
-            <% if (redeemable.disabled) { %>
+            <% if (event.disabled) { %>
             <div
                 style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.8); z-index: 2;">
                 <h4 style="color: white; padding-top: 1vh;">
@@ -48,38 +38,38 @@
             <% } %>
             <div class="uk-card uk-card-default uk-card-body">
                 <h3 class="uk-card-title">
-                    <%= redeemable.title %> (<%= redeemable.quantity %> left)
+                    <%= event.title %> (<%= event.date.toLocaleDateString("hu-HU") %>)
                 </h3>
                 <p>
-                    <span><%= redeemable.price %></span>
+                    <span><%= event.price %></span>
                     <img src="/assets/icons8-coin-48.png" width="24" alt="balance in coins"
                         style="vertical-align: sub;">
                 </p>
-                <img src="<%= redeemable.img %>" alt="Tesco logo">
+                <% if (event.img) { %>
+                    <img src="<%= event.img %>" alt="Event logo">
+                <% } %>
                 <p>
-                    <%= redeemable.desc %>
+                    <%= event.desc %>
                 </p>
-                <% if (!redeemable.disabled) { %>
-                <a href="/disable/<%= redeemable._id %>" class="uk-button uk-button-danger uk-margin" style="margin-bottom: 0px;">DISABLE</a>
-                <a href="/export/<%= redeemable._id %>" class="uk-button uk-button-secondary uk-margin" style="margin-top: 0px;">EXPORT CODES</a>
+                <% if (!event.disabled) { %>
+                <a href="/admin/event/<%= event._id %>" class="uk-button uk-button-secondary uk-margin" style="margin-top: 0px;">ADD TICKETS</a>
+                <a href="/disable/<%= event._id %>" class="uk-button uk-button-danger uk-margin" style="margin-bottom: 0px;">DISABLE</a>
+                <a href="/export/<%= event._id %>" class="uk-button uk-button-secondary uk-margin" style="margin-top: 0px;">EXPORT TICKETS</a>
                 <% } %>
             </div>
-            <% if (redeemable.disabled) { %>
-            <a href="/enable/<%= redeemable._id %>" class="uk-button uk-button-primary uk-margin"
-                style="z-index: 3; margin-left: -15px; margin-bottom: 0px; height: 40px; position: absolute; bottom: 40px;">ENABLE</a>
-                <a href="/export/<%= redeemable._id %>" class="uk-button uk-button-secondary uk-margin"
-                    style="z-index: 3; margin-left: -15px; height: 40px; margin-top: 0px; position: absolute; bottom: 0;">EXPORT CODESs</a>
+            <% if (event.disabled) { %>
+                <a href="/admin/event/<%= event._id %>" class="uk-button uk-button-secondary uk-margin" style="margin-top: 0px;">ADD TICKETS</a>
+                <a href="/enable/<%= event._id %>" class="uk-button uk-button-primary uk-margin"
+                    style="z-index: 3; margin-left: -15px; margin-bottom: 0px; height: 40px; position: absolute; bottom: 40px;">ENABLE</a>
+                <a href="/export/<%= event._id %>" class="uk-button uk-button-secondary uk-margin"
+                    style="z-index: 3; margin-left: -15px; height: 40px; margin-top: 0px; position: absolute; bottom: 0;">EXPORT TICKETS</a>
             <% } %>
         </div>
         <% }); %>
     </div>
-
-    <div class="uk-width-1-1@s uk-text-center uk-margin">
-        <a href="/orders" class="uk-button uk-button-primary">
-            VIEW ORDER HISTORY
-        </a>
-    </div>
-
+    <% if (events.length === 0) { %>
+        <P>No events</p>
+    <% } %>
 </div>
 
 <%- include ('components/footer') %>

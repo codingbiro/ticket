@@ -1,32 +1,29 @@
-const addRedeemableMW = require('../middlewares/redeem/addRedeemableMW');
+const addEventMW = require('../middlewares/event/addEventMW');
+const addTicketsMW = require('../middlewares/ticket/addTicketsMW');
+const addTicketCategoryMW = require('../middlewares/ticket/addTicketCategoryMW');
+
 const adminOnlyMW = require('../middlewares/auth/adminOnlyMW');
 const authMW = require('../middlewares/auth/authMW');
 
 const barionCBMW = require('../middlewares/payment/barionCBMW');
 
-const canRedeemMW = require('../middlewares/redeem/canRedeemMW');
 const canRegisterMW = require('../middlewares/auth/canRegisterMW');
 const canResetPassMW = require('../middlewares/auth/canResetPassMW');
 const checkPassMW = require('../middlewares/auth/checkPassMW');
 const checkPassMW2 = require('../middlewares/auth/checkPassMW2');
-const createRedeemTransactionMW = require('../middlewares/redeem/createRedeemTransactionMW');
 
-const disableRedeemableMW = require('../middlewares/redeem/disableRedeemableMW');
-
-const enableRedeemableMW = require('../middlewares/redeem/enableRedeemableMW');
 const exportMW = require('../middlewares/exportMW');
 
 const getOrdersMW = require('../middlewares/payment/getOrdersMW');
-const getRedeemablesMW = require('../middlewares/redeem/getRedeemablesMW');
-
-const ifEnableRedeemableMW = require('../middlewares/redeem/ifEnableRedeemableMW');
-const ifDisableRedeemableMW = require('../middlewares/redeem/ifDisableRedeemableMW');
+const getEventsMW = require('../middlewares/event/getEventsMW');
+const getEventMW = require('../middlewares/event/getEventMW');
+const getTicketCategoriesMW = require('../middlewares/ticket/getTicketCategoriesMW');
+const getTicketCategoryMW = require('../middlewares/ticket/getTicketCategoryMW');
 
 const logoutMW = require('../middlewares/auth/logoutMW');
 
 const payMW = require('../middlewares/payment/payMW');
 
-const redeemMW = require('../middlewares/redeem/redeemMW');
 const redirectLoggedInMW = require('../middlewares/redirectLoggedInMW');
 const redirectMW = require('../middlewares/redirectMW');
 const redirectToLastViewMW = require('../middlewares/redirectToLastViewMW');
@@ -42,6 +39,7 @@ const utils = require('../misc/utils');
 const userModel = require('../models/user');
 const eventModel = require('../models/event');
 const ticketModel = require('../models/ticket');
+const ticketCategoryModel = require('../models/ticketCategory');
 const resetModel = require('../models/reset');
 const orderModel = require('../models/order');
 
@@ -52,6 +50,7 @@ module.exports = function application(app) {
     ticketModel,
     orderModel,
     resetModel,
+    ticketCategoryModel,
   };
 
   app.get('/',
@@ -83,12 +82,13 @@ module.exports = function application(app) {
   app.get('/add',
     authMW(objRepo, 'add'),
     adminOnlyMW(),
+    (req, res, next) => { res.locals.timeNow = utils.timeNow; next(); },
     renderMW('add'));
 
   app.post('/add',
     authMW(objRepo, 'add'),
     adminOnlyMW(),
-    addRedeemableMW(objRepo),
+    addEventMW(objRepo),
     redirectMW('admin'));
 
   app.get('/export/:id',
@@ -109,34 +109,62 @@ module.exports = function application(app) {
   app.get('/admin',
     authMW(objRepo, 'admin'),
     adminOnlyMW(),
-    getRedeemablesMW(objRepo),
+    getEventsMW(objRepo),
     renderMW('admin'));
 
-  app.get('/enable/:id',
+  app.get('/admin/event/:eventId',
     authMW(objRepo, 'admin'),
     adminOnlyMW(),
-    ifEnableRedeemableMW(objRepo),
-    enableRedeemableMW(objRepo),
+    getEventMW(objRepo),
+    getTicketCategoriesMW(objRepo),
+    renderMW('adminEvent'));
+
+  app.get('/admin/event/:eventId/add',
+    authMW(objRepo, 'admin'),
+    adminOnlyMW(),
+    getEventMW(objRepo),
+    getTicketCategoriesMW(objRepo),
+    renderMW('addTicketCategory'));
+
+  app.post('/admin/event/:eventId/add',
+    authMW(objRepo, 'admin'),
+    adminOnlyMW(),
+    addTicketCategoryMW(objRepo),
     redirectMW('admin'));
 
-  app.get('/disable/:id',
+  app.get('/admin/event/:eventId/:ticketCategoryId',
     authMW(objRepo, 'admin'),
     adminOnlyMW(),
-    ifDisableRedeemableMW(objRepo),
-    disableRedeemableMW(objRepo),
+    addTicketsMW(objRepo),
     redirectMW('admin'));
 
   app.get('/events',
-    authMW(objRepo, 'spend'),
-    getRedeemablesMW(objRepo),
-    renderMW('spend'));
+    authMW(objRepo, 'events'),
+    getEventsMW(objRepo),
+    renderMW('events'));
+
+  app.get('/event/:eventId',
+    authMW(objRepo, 'events'),
+    getEventMW(objRepo),
+    getTicketCategoriesMW(objRepo),
+    renderMW('event'));
+
+  app.get('/buy/:eventId/:ticketCategoryId',
+    authMW(objRepo, 'events'),
+    getEventMW(objRepo),
+    getTicketCategoryMW(objRepo),
+    renderMW('buyTicket'));
+
+  app.post('/buy/:eventId/:ticketCategoryId',
+    authMW(objRepo, 'events'),
+    payMW(objRepo));
 
   app.get('/redeem/:id',
     authMW(objRepo, 'spend'),
-    canRedeemMW(objRepo),
-    redeemMW(objRepo),
-    createRedeemTransactionMW(objRepo), // TODO from _name_
-    (req, res, next) => { utils.sendMail('redeem', 'Your redeem code from endorse.biro.wtf', `Your redeem code: ${res.locals.theCode}. Valid for 12 months.`, req.session.user.email, req.session.user.name); next(); },
+    // canRedeemMW(objRepo),
+    // redeemMW(objRepo),
+    // createRedeemTransactionMW(objRepo), // TODO from _name_
+    (req, res, next) => { utils.sendMail('redeem', 'Your redeem code from ticket.biro.wtf', `Your redeem code: ${res.locals.theCode}. Valid for 12 months.`, req.session.user.email, req.session.user.name); next(); },
     redirectMW('spend'));
 
   app.get('/iforgot',

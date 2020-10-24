@@ -1,43 +1,64 @@
+/* eslint-disable no-await-in-loop */
 module.exports = function addTickets(objectrepository) {
-  const { eventModel, ticketModel } = objectrepository;
+  const { ticketCategoryModel, ticketModel } = objectrepository;
 
   return function addTicketsMW(req, res, next) {
-    const desc = req.body.desc ? req.body.desc : null;
-    const title = req.body.title ? req.body.title : null;
-    const price = req.body.price ? req.body.price : null;
-    const event = req.body.event ? req.body.event : null;
-    const user = req.body.user ? req.body.user : null;
-    const quantity = req.body.quantity ? req.body.quantity : 0;
-
+    const { ticketCategoryId } = req.params;
     // TODO check if event exists
-    for (let i = 0; i < quantity; i = i + 1) {
-      const newTicket = {
-        desc,
-        title,
-        price,
-        user,
-        event,
-        code: 'default'
-      };  
-      ticketModel.create(
-        newTicket,
-        (err) => {
-          if (err) {
-            req.session.sessionFlash = {
-              type: 'danger',
-              message: 'DB error.',
-            };
-            return next(err);
-          }
-  
-          req.session.sessionFlash = {
-            type: 'success',
-            message: 'New ticket(s) has been added.',
-          };
-  
-          return next();
-        },
-      );
-    }
+
+    ticketCategoryModel.findOne({ _id: ticketCategoryId }, async (err, ticketCategory) => {
+      if (err) {
+        req.session.sessionFlash = {
+          type: 'danger',
+          message: 'DB error.',
+        };
+
+        return next(err);
+      }
+
+      if (!ticketCategory || ticketCategory.actiaved) {
+        req.session.sessionFlash = {
+          type: 'danger',
+          message: 'No ticketCategory found.',
+        };
+
+        return res.redirect('/');
+      }
+
+      const { quantity } = ticketCategory;
+      const tickets = [];
+      for (let i = 0; i < quantity; i += 1) {
+        const newTicket = {
+          code: 'default',
+          _ticketCategory: ticketCategoryId,
+        };
+        const t = await ticketModel.create(newTicket);
+        tickets.push(t._id);
+      }
+
+      try {
+        await ticketCategoryModel.findOneAndUpdate({ _id: ticketCategoryId }, {
+          _ticket: tickets,
+        }, {
+          useFindAndModify: false,
+          runValidators: true,
+        });
+      } catch (e) {
+        console.error(e);
+        req.session.sessionFlash = {
+          type: 'danger',
+          message: 'Server error.',
+        };
+
+        return next(e);
+      }
+
+      req.session.sessionFlash = {
+        type: 'success',
+        message: 'Category activated.',
+      };
+
+      return next();
+    });
   };
 };
