@@ -38,8 +38,10 @@ module.exports = function barionCB(objectrepository) {
               };
             }
 
+            console.log(reserv._ticket);
+
             await userModel.findOneAndUpdate({ _id: theorder._user }, {
-              _tickets: reserv._ticket,
+              _ticket: reserv._ticket,
             }, {
               useFindAndModify: false,
               runValidators: true,
