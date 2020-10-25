@@ -1,8 +1,8 @@
 module.exports = function getTickets(objectrepository) {
-  const { ticketModel } = objectrepository;
+  const { userModel } = objectrepository;
 
   return function getTicketsMW(req, res, next) {
-    ticketModel.find({ _user: req.session.user._id }, (err, tickets) => {
+    userModel.find({ _id: req.session.user._id }, (err, user) => {
       if (err) {
         req.session.sessionFlash = {
           type: 'danger',
@@ -12,7 +12,7 @@ module.exports = function getTickets(objectrepository) {
         return next(err);
       }
 
-      res.locals.tickets = tickets;
+      res.locals.tickets = user._ticket;
 
       return next();
     });
