@@ -74,6 +74,10 @@ require('./routes/index')(app);
 // Port settings
 const PORT = process.env.PORT || 3000;
 
+const init = require('./config/initDb');
+
+init.createAdminUser();
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Hi port ${PORT}`);
