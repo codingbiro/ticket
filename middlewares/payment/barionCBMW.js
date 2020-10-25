@@ -8,9 +8,7 @@ const PRIVATE_POS_KEY = process.env.NODE_ENV ? process.env.BARION_API_KEY : '8cd
 const STATE = 'v2/payment/getpaymentstate';
 
 module.exports = function barionCB(objectrepository) {
-  const { orderModel } = objectrepository;
-  const { userModel } = objectrepository;
-  const { transactionModel } = objectrepository;
+  const { reservationModel, orderModel, ticketModel, transactionModel, userModel } = objectrepository;
 
   return function barionCBMW(req, res, next) {
     const theid = req.query.paymentId;
@@ -37,12 +35,21 @@ module.exports = function barionCB(objectrepository) {
               runValidators: true,
             });
 
-            await transactionModel.create({
-              title: `${theorder.desc} Coin purchase`,
-              type: 'purchase',
-              _from: theuser._id,
-              total: theorder.total,
+            const reserv = await reservationModel.findOne({ _user: theuser._id });
+
+            if (!reserv) {
+              console.error('err no reserv');
+              req.session.sessionFlash = {
+                type: 'danger',
+                message: 'No reservation found.',
+              };
+            }
+
+            await ticketModel.findAndUpdate({ _id: reserv.ids }, {
+              _user: theuser._id,
             });
+
+            // TODO !!!!
           } else {
             await orderModel.findOneAndUpdate({ pid: theid }, {
               state: response.data.Status,

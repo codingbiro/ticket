@@ -30,6 +30,7 @@ const redirectMW = require('../middlewares/redirectMW');
 const redirectToLastViewMW = require('../middlewares/redirectToLastViewMW');
 const registerMW = require('../middlewares/auth/registerMW');
 const renderMW = require('../middlewares/renderMW');
+const reservationMW = require('../middlewares/reservationMW');
 const resetPassMW = require('../middlewares/auth/resetPassMW');
 const resetPassWithTokenMW = require('../middlewares/auth/resetPassWithTokenMW');
 
@@ -42,6 +43,7 @@ const eventModel = require('../models/event');
 const ticketModel = require('../models/ticket');
 const ticketCategoryModel = require('../models/ticketCategory');
 const resetModel = require('../models/reset');
+const reservationModel = require('../models/reservation');
 const orderModel = require('../models/order');
 
 module.exports = function application(app) {
@@ -51,6 +53,7 @@ module.exports = function application(app) {
     ticketModel,
     orderModel,
     resetModel,
+    reservationModel,
     ticketCategoryModel,
   };
 
@@ -163,6 +166,7 @@ module.exports = function application(app) {
 
   app.post('/buy/:eventId/:ticketCategoryId',
     authMW(objRepo, 'events'),
+    reservationMW(objRepo),
     payMW(objRepo));
 
   app.get('/redeem/:id',

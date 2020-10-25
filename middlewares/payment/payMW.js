@@ -8,7 +8,7 @@ const PRIVATE_POS_KEY = process.env.NODE_ENV ? process.env.BARION_API_KEY : '8cd
 const START = 'v2/payment/start';
 
 module.exports = function pay(objectrepository) {
-  const { orderModel, ticketCategoryModel } = objectrepository;
+  const { orderModel, ticketCategoryModel, ticketModel } = objectrepository;
 
   // TODO Return values etc
 

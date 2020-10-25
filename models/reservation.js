@@ -1,28 +1,23 @@
 const { Schema } = require('mongoose');
 const db = require('../config/db');
 
-const Ticket = db.model('Ticket', {
-  code: String,
+const Reservation = db.model('Reservation', {
   valid: {
     type: Boolean,
     default: true,
-  },
-  reserved: {
-    type: Boolean,
-    default: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  _ticket: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Ticket',
+  }],
   _user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  _ticketCategory: {
-    type: Schema.Types.ObjectId,
-    ref: 'TicketCategory',
-  },
 });
 
-module.exports = Ticket;
+module.exports = Reservation;
