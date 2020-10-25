@@ -28,13 +28,6 @@ module.exports = function barionCB(objectrepository) {
 
             const theuser = await userModel.findOne({ _id: theorder._user });
 
-            await userModel.findOneAndUpdate({ _id: theorder._user }, {
-              balance: theuser.balance + Number(theorder.desc),
-            }, {
-              useFindAndModify: false,
-              runValidators: true,
-            });
-
             const reserv = await reservationModel.findOne({ _user: theuser._id });
 
             if (!reserv) {
@@ -45,8 +38,11 @@ module.exports = function barionCB(objectrepository) {
               };
             }
 
-            await ticketModel.updateMany({ _id: { $in: reserv.ids } }, {
-              _user: theuser._id,
+            await userModel.findOneAndUpdate({ _id: theorder._user }, {
+              _ticket: reserv.ids,
+            }, {
+              useFindAndModify: false,
+              runValidators: true,
             });
 
             // TODO !!!!
