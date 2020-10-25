@@ -46,6 +46,12 @@ module.exports = function barionCB(objectrepository) {
               useFindAndModify: false,
               runValidators: true,
             });
+            await reservationModel.findOneAndUpdate({ _user: theorder._user, valid: true }, {
+              valid: false,
+            }, {
+              useFindAndModify: false,
+              runValidators: true,
+            });
 
             // TODO !!!!
           } else {
