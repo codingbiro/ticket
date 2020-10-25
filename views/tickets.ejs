@@ -10,6 +10,9 @@
 </div>
 
 <div style="min-height: 70vh; text-align: center; padding-top: 5vh; margin: auto; max-width: 1000px;">
+    <p>
+        Total: <%= tickets.length %> ticket <%= tickets.length === 1 ? '':'s' %>
+    </p>
 
     <div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid>
         <% tickets.forEach(function(ticket){ %>
