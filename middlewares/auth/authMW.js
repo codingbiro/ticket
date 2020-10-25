@@ -1,15 +1,17 @@
-module.exports = function auth(objectrepository, name) {
+module.exports = function auth(objectrepository) {
   const { userModel } = objectrepository;
 
   return function authMW(req, res, next) {
-    console.log(req);
+    const path = req.originalUrl.substring(1);
+
+    console.log(path);
     if (!req.session.user) {
       req.session.sessionFlash = {
         type: 'danger',
         message: 'Log in to view content.',
       };
 
-      return name ? res.redirect(`/?view=${name}`) : res.redirect('/');
+      return path ? res.redirect(`/?view=${path}`) : res.redirect('/');
     }
 
     userModel.findOne({ _id: req.session.user._id }, (err, user) => {
@@ -32,7 +34,7 @@ module.exports = function auth(objectrepository, name) {
         message: 'Invalid session.',
       };
 
-      return name ? res.redirect(`/?view=${name}`) : res.redirect('/');
+      return path ? res.redirect(`/?view=${path}`) : res.redirect('/');
     });
 
     return null;
