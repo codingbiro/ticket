@@ -13,7 +13,7 @@ const Order = db.model('Order', {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  _tickets: [{
+  _ticket: [{
     type: Schema.Types.ObjectId,
     ref: 'Ticket',
   }],

@@ -11,7 +11,7 @@ const User = db.model('User', {
     type: Boolean,
     default: false,
   },
-  _tickets: [{
+  _ticket: [{
     type: Schema.Types.ObjectId,
     ref: 'Ticket',
   }],
