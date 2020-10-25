@@ -1,10 +1,8 @@
-module.exports = function auth(objectrepository) {
+module.exports = function auth(objectrepository, name) {
   const { userModel } = objectrepository;
 
   return function authMW(req, res, next) {
-    const path = req.originalUrl.substring(1);
-
-    console.log(path);
+    const path = name || req.originalUrl.substring(1);
     if (!req.session.user) {
       req.session.sessionFlash = {
         type: 'danger',

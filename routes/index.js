@@ -74,23 +74,18 @@ module.exports = function application(app) {
   app.get('/logout',
     logoutMW());
 
-  app.get('/pay/:coins',
-    authMW(objRepo),
-    adminOnlyMW(),
-    payMW(objRepo));
-
   app.get('/dashboard',
-    authMW(objRepo, 'dashboard'),
+    authMW(objRepo),
     renderMW('dashboard/index'));
 
   app.get('/add',
-    authMW(objRepo, 'add'),
+    authMW(objRepo),
     adminOnlyMW(),
     (req, res, next) => { res.locals.timeNow = utils.timeNow; next(); },
     renderMW('add'));
 
   app.post('/add',
-    authMW(objRepo, 'add'),
+    authMW(objRepo),
     adminOnlyMW(),
     addEventMW(objRepo),
     redirectMW('admin'));
@@ -102,16 +97,16 @@ module.exports = function application(app) {
     redirectMW('admin'));
 
   app.get('/profile',
-    authMW(objRepo, 'profile'),
+    authMW(objRepo),
     renderMW('profile'));
 
   app.post('/profile',
-    authMW(objRepo, 'profile'),
+    authMW(objRepo),
     saveProfileDataMW(objRepo),
     redirectMW('profile'));
 
   app.get('/admin',
-    authMW(objRepo, 'admin'),
+    authMW(objRepo),
     adminOnlyMW(),
     getEventsMW(objRepo),
     renderMW('admin'));
@@ -124,20 +119,20 @@ module.exports = function application(app) {
     renderMW('adminEvent'));
 
   app.get('/admin/event/:eventId/add',
-    authMW(objRepo, 'admin'),
+    authMW(objRepo),
     adminOnlyMW(),
     getEventMW(objRepo),
     getTicketCategoriesMW(objRepo),
     renderMW('addTicketCategory'));
 
   app.post('/admin/event/:eventId/add',
-    authMW(objRepo, 'admin'),
+    authMW(objRepo),
     adminOnlyMW(),
     addTicketCategoryMW(objRepo),
     redirectMW('admin'));
 
   app.get('/admin/event/:eventId/:ticketCategoryId',
-    authMW(objRepo, 'admin'),
+    authMW(objRepo),
     adminOnlyMW(),
     addTicketsMW(objRepo),
     redirectMW('admin'));
@@ -159,23 +154,17 @@ module.exports = function application(app) {
     renderMW('event'));
 
   app.get('/buy/:eventId/:ticketCategoryId',
-    authMW(objRepo, 'events'),
+    authMW(objRepo),
     getEventMW(objRepo),
     getTicketCategoryMW(objRepo),
     renderMW('buyTicket'));
 
   app.post('/buy/:eventId/:ticketCategoryId',
-    authMW(objRepo, 'events'),
+    authMW(objRepo),
     reservationMW(objRepo),
     payMW(objRepo));
 
-  app.get('/redeem/:id',
-    authMW(objRepo, 'spend'),
-    // canRedeemMW(objRepo),
-    // redeemMW(objRepo),
-    // createRedeemTransactionMW(objRepo), // TODO from _name_
-    (req, res, next) => { utils.sendMail('redeem', 'Your redeem code from tix.biro.wtf', `Your redeem code: ${res.locals.theCode}. Valid for 12 months.`, req.session.user.email, req.session.user.name); next(); },
-    redirectMW('spend'));
+  // (req, res, next) => { utils.sendMail('redeem', 'Your redeem code from tix.biro.wtf', `Your redeem code: ${res.locals.theCode}. Valid for 12 months.`, req.session.user.email, req.session.user.name); next(); },
 
   app.get('/iforgot',
     renderMW('iforgot'));
