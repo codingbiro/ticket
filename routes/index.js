@@ -19,6 +19,7 @@ const getEventsMW = require('../middlewares/event/getEventsMW');
 const getEventMW = require('../middlewares/event/getEventMW');
 const getTicketCategoriesMW = require('../middlewares/ticket/getTicketCategoriesMW');
 const getTicketCategoryMW = require('../middlewares/ticket/getTicketCategoryMW');
+const getTicketsMW = require('../middlewares/ticket/getTicketsMW');
 
 const logoutMW = require('../middlewares/auth/logoutMW');
 
@@ -142,6 +143,11 @@ module.exports = function application(app) {
     authMW(objRepo, 'events'),
     getEventsMW(objRepo),
     renderMW('events'));
+
+  app.get('/tickets',
+    authMW(objRepo, 'tickets'),
+    getTicketsMW(objRepo),
+    renderMW('tickets'));
 
   app.get('/event/:eventId',
     authMW(objRepo, 'events'),
