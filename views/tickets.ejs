@@ -11,21 +11,13 @@
 
 <div style="min-height: 70vh; text-align: center; padding-top: 5vh; margin: auto; max-width: 1000px;">
 
-    <div class="uk-child-width-1-3@m uk-grid-small uk-grid-match" uk-grid>
+    <div class="uk-child-width-1-2@m uk-grid-small uk-grid-match" uk-grid>
         <% tickets.forEach(function(ticket){ %>
         <div style="display: block;">
             <div class="uk-card uk-card-default uk-card-body">
                 <h3 class="uk-card-title">
                     <%= ticket._id %>
                 </h3>
-                <p>
-                    <span><%= ticket.price %></span>
-                    <img src="/assets/icons8-coin-48.png" width="24" alt="balance in coins"
-                        style="vertical-align: sub;">
-                </p>
-                <p>
-                    <%= ticket.code %>
-                </p>
                 <a href="#" class="uk-button uk-button-secondary uk-margin">Show QR code</a>
             </div>
         </div>
