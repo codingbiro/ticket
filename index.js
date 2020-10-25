@@ -12,18 +12,10 @@ require('dotenv').config();
 
 const app = express();
 
-const stackimpact = require('stackimpact');
 const Sentry = require('@sentry/node');
 
 // TODO
 Sentry.init({ dsn: 'https://204b975f8c8940a1aa79b4092a23e7cb@o414204.ingest.sentry.io/5303250' });
-
-// TODO WHAT IS THIS
-// eslint-disable-next-line no-unused-vars
-const agent = stackimpact.start({
-  agentKey: 'adf426a063b56583d04a30db33e45c0a0535b468',
-  appName: 'MyNodejsApp',
-});
 
 // Using EJS templating
 app.set('view engine', 'ejs');

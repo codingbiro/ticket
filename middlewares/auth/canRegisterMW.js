@@ -13,6 +13,7 @@ module.exports = function canRegister(objectrepository) {
 
     userModel.findOne({ email: req.body.email }, (err, user) => {
       if (err) {
+console.log(err);
         req.session.sessionFlash = {
           type: 'danger',
           message: 'DB error.',

@@ -10,6 +10,7 @@ module.exports = function register(objectrepository) {
       password: req.body.password,
     }, (err) => {
       if (err) {
+console.log(err);
         req.session.sessionFlash = {
           type: 'danger',
           message: 'DB error.',
