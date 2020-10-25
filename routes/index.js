@@ -112,7 +112,7 @@ module.exports = function application(app) {
     renderMW('admin'));
 
   app.get('/admin/event/:eventId',
-    authMW(objRepo, 'admin'),
+    authMW(objRepo),
     adminOnlyMW(),
     getEventMW(objRepo),
     getTicketCategoriesMW(objRepo),
@@ -138,17 +138,17 @@ module.exports = function application(app) {
     redirectMW('admin'));
 
   app.get('/events',
-    authMW(objRepo, 'events'),
+    authMW(objRepo),
     getEventsMW(objRepo),
     renderMW('events'));
 
   app.get('/tickets',
-    authMW(objRepo, 'tickets'),
+    authMW(objRepo),
     getTicketsMW(objRepo),
     renderMW('tickets'));
 
   app.get('/event/:eventId',
-    authMW(objRepo, 'events'),
+    authMW(objRepo),
     getEventMW(objRepo),
     getTicketCategoriesMW(objRepo),
     renderMW('event'));
