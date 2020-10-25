@@ -6,5 +6,5 @@ module.exports = function createAdminUser() {
   newUser.email = 'admin@birovince.com';
   newUser.password = 'admin@birovince.com';
   newUser.isAdmin = true;
-  newUser.save((err) => console.log(err));
+  try { newUser.save((err) => console.log(err)); } catch (e) { console.log(e); }
 };
