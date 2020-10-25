@@ -9,29 +9,23 @@
         </ul>
     </div>
     <% } else { %>
-    <ul class="uk-navbar-nav">
-        <li <% if ( typeof eventsTab !== "undefined") { %> class="uk-active" <% } %>>
-            <a href="/events">EVENTS</a>
-        </li>
-        <li <% if ( typeof profile !== "undefined") { %> class="uk-active" <% } %>>
-            <a href="/profile">PROFILE</a>
-        </li>
-        <li <% if ( typeof ticketsTab !== "undefined") { %> class="uk-active" <% } %>>
-            <a href="/tickets">TICKETS</a>
-        </li>
-        <% if (user.isAdmin) { %>
-        <li <% if (typeof admin !== 'undefined') { %> class="uk-active" <% } %>><a href="/admin">ADMIN</a></li>
-        <% } %>
-        <li><a href="/logout">LOGOUT</a></li>
-    </ul>
-
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav">
+            <li <% if ( typeof eventsTab !== "undefined") { %> class="uk-active" <% } %>>
+                <a href="/events">EVENTS</a>
+            </li>
+            <li <% if ( typeof profile !== "undefined") { %> class="uk-active" <% } %>>
+                <a href="/profile">PROFILE</a>
+            </li>
+            <li <% if ( typeof ticketsTab !== "undefined") { %> class="uk-active" <% } %>>
+                <a href="/tickets">TICKETS</a>
+            </li>
+            <% if (user.isAdmin) { %>
+            <li <% if (typeof admin !== 'undefined') { %> class="uk-active" <% } %>><a href="/admin">ADMIN</a></li>
+            <% } %>
+            <li><a href="/logout">LOGOUT</a></li>
+        </ul>
     </div>
-    <div class="uk-navbar-center" id="logo">
-        <a href="/dashboard">
-            <img src="/assets/logo.png" alt="Ticket logo" width="40">
-        </a>
-    </div>
-
     <div class="uk-navbar-right">
         <ul class="uk-navbar-nav">
             <li style="padding-right: 10px;">
