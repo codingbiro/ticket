@@ -45,7 +45,7 @@ module.exports = function barionCB(objectrepository) {
               };
             }
 
-            await ticketModel.findAndUpdate({ _id: reserv.ids }, {
+            await ticketModel.updateMany({ _id: { $in: reserv.ids } }, {
               _user: theuser._id,
             });
 

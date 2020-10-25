@@ -32,7 +32,7 @@ module.exports = function reservation(objectrepository) {
       }
 
       try {
-        await ticketModel.findAndUpdate({ _id: ids }, {
+        await ticketModel.updateMany({ _id: { $in: ids } }, {
           reserved: true,
         }, {
           useFindAndModify: false,
