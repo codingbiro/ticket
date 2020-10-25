@@ -2,6 +2,7 @@ module.exports = function auth(objectrepository, name) {
   const { userModel } = objectrepository;
 
   return function authMW(req, res, next) {
+    console.log(req);
     if (!req.session.user) {
       req.session.sessionFlash = {
         type: 'danger',
