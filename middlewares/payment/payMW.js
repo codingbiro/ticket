@@ -42,8 +42,8 @@ module.exports = function pay(objectrepository) {
         GuestCheckOut: 'true',
         FundingSources: ['All'],
         PaymentRequestId: req.session.user._id,
-        RedirectUrl: 'http://ticket.biro.wtf/thanks', // TODO links
-        CallbackUrl: 'https://ticket.biro.wtf/cb',
+        RedirectUrl: 'http://tix.biro.wtf/thanks', // TODO links
+        CallbackUrl: 'https://tix.biro.wtf/cb',
         Transactions: [{
           POSTransactionId: req.session.user._id,
           Payee: 'quick.biro@gmail.com', // TODO payee

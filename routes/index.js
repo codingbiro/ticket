@@ -164,7 +164,7 @@ module.exports = function application(app) {
     // canRedeemMW(objRepo),
     // redeemMW(objRepo),
     // createRedeemTransactionMW(objRepo), // TODO from _name_
-    (req, res, next) => { utils.sendMail('redeem', 'Your redeem code from ticket.biro.wtf', `Your redeem code: ${res.locals.theCode}. Valid for 12 months.`, req.session.user.email, req.session.user.name); next(); },
+    (req, res, next) => { utils.sendMail('redeem', 'Your redeem code from tix.biro.wtf', `Your redeem code: ${res.locals.theCode}. Valid for 12 months.`, req.session.user.email, req.session.user.name); next(); },
     redirectMW('spend'));
 
   app.get('/iforgot',
