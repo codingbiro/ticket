@@ -7,9 +7,14 @@
     <p><%= sessionFlash.message %></p>
   </div>
   <% } %>
-  <h1>Thank you!</h1>
+  <h1>Thank you! Purchase processing in progress!</h1>
+  <h2>Order status: <%= order.state %></h2>
+  <h3>Order name: <%= order.title %> - HUF <%= order.total %></h3>
   <p>
     Your ticket(s) will appear as soon as the payment is processed. If your ticket(s) do not arrive in 1 hr, please contact the support.
+    <strong>
+      You can check your payment state in Profile/History
+    </strong>
   </p>
 </div>
 <%- include ('components/footer') %>

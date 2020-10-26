@@ -36,6 +36,8 @@ const resetPassWithTokenMW = require('../middlewares/auth/resetPassWithTokenMW')
 
 const saveProfileDataMW = require('../middlewares/user/saveProfileDataMW');
 
+const thanksMW = require('../middlewares/thanksMW');
+
 const utils = require('../misc/utils');
 
 const userModel = require('../models/user');
@@ -185,6 +187,7 @@ module.exports = function application(app) {
 
   app.get('/thanks',
     authMW(objRepo),
+    thanksMW(objRepo),
     renderMW('thanks'));
 
   app.get('/register',
