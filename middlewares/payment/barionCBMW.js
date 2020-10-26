@@ -38,10 +38,10 @@ module.exports = function barionCB(objectrepository) {
               };
             }
 
-            console.log(reserv._ticket);
+            const tickets = theuser._ticket ? [...theuser._ticket, ...reserv._ticket] : reserv._ticket;
 
             await userModel.findOneAndUpdate({ _id: theorder._user }, {
-              _ticket: reserv._ticket,
+              _ticket: tickets,
             }, {
               useFindAndModify: false,
               runValidators: true,
@@ -55,6 +55,14 @@ module.exports = function barionCB(objectrepository) {
 
             // TODO !!!!
           } else {
+            if (response.data.Status === 'Expired' || response.data.Status === 'Canceled') { 
+              await reservationModel.findOneAndUpdate({ _user: req.session.user._id, valid: true }, {
+                valid: false,
+              }, {
+                useFindAndModify: false,
+                runValidators: true,
+              });
+            }
             await orderModel.findOneAndUpdate({ pid: theid }, {
               state: response.data.Status,
             }, {

@@ -8,11 +8,11 @@ const PRIVATE_POS_KEY = process.env.NODE_ENV ? process.env.BARION_API_KEY : '8cd
 const START = 'v2/payment/start';
 
 module.exports = function pay(objectrepository) {
-  const { orderModel, ticketCategoryModel, ticketModel } = objectrepository;
+  const { orderModel, ticketCategoryModel, reservationModel, ticketModel } = objectrepository;
 
   // TODO Return values etc
 
-  return function payMW(req, res, next) {
+  return async function payMW(req, res, next) {
     const { ticketCategoryId } = req.params;
     const quantity = Number(req.body.quantity);
     if (!quantity || quantity === 0) {
@@ -21,14 +21,34 @@ module.exports = function pay(objectrepository) {
         message: 'Req error.',
       };
 
-      return next('Req error');
+      await reservationModel.findOneAndUpdate({ _user: req.session.user._id, valid: true }, {
+        valid: false,
+      }, {
+        useFindAndModify: false,
+        runValidators: true,
+      });
+      return next();
     }
 
-    ticketCategoryModel.findOne({ _id: ticketCategoryId }, (err, ticketCategory) => {
+    ticketCategoryModel.findOne({ _id: ticketCategoryId }, async (err, ticketCategory) => {
       if (err) {
+        await reservationModel.findOneAndUpdate({ _user: req.session.user._id, valid: true }, {
+          valid: false,
+        }, {
+          useFindAndModify: false,
+          runValidators: true,
+        });
+
         return next(err);
       }
       if (!ticketCategory || !ticketCategory.enabled) {
+        await reservationModel.findOneAndUpdate({ _user: req.session.user._id, valid: true }, {
+          valid: false,
+        }, {
+          useFindAndModify: false,
+          runValidators: true,
+        });
+
         return next('Bad request');
       }
       let thetotal = 0;
