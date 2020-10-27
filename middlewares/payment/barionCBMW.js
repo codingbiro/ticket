@@ -17,17 +17,15 @@ module.exports = function barionCB(objectrepository) {
     axios.get(BASE_URL + STATE + PARAMS).then(async (response) => {
       if (response) {
         try {
+          const theorder = await orderModel.findOneAndUpdate({ pid: theid }, {
+            state: response.data.Status,
+            discharged: response.data.Status === 'Succeeded',
+          }, {
+            useFindAndModify: false,
+            runValidators: true,
+          });
+          const theuser = await userModel.findOne({ _id: theorder._user });
           if (response.data.Status === 'Succeeded') {
-            const theorder = await orderModel.findOneAndUpdate({ pid: theid }, {
-              state: response.data.Status,
-              discharged: true,
-            }, {
-              useFindAndModify: false,
-              runValidators: true,
-            });
-
-            const theuser = await userModel.findOne({ _id: theorder._user });
-
             const reserv = await reservationModel.findOne({ _user: theuser._id });
 
             if (!reserv) {
@@ -54,17 +52,9 @@ module.exports = function barionCB(objectrepository) {
             });
 
             // TODO !!!!
-          } else {
-            if (response.data.Status === 'Expired' || response.data.Status === 'Canceled') { 
-              await reservationModel.findOneAndUpdate({ _user: req.session.user._id, valid: true }, {
-                valid: false,
-              }, {
-                useFindAndModify: false,
-                runValidators: true,
-              });
-            }
-            await orderModel.findOneAndUpdate({ pid: theid }, {
-              state: response.data.Status,
+          } else if (response.data.Status === 'Expired' || response.data.Status === 'Canceled') {
+            await reservationModel.findOneAndUpdate({ _user: theuser._id, valid: true }, {
+              valid: false,
             }, {
               useFindAndModify: false,
               runValidators: true,
