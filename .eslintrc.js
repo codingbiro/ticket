@@ -15,5 +15,6 @@ module.exports = {
     quotes: [2, 'single', { avoidEscape: true }],
     'no-underscore-dangle': 'off',
     'no-console': 'off',
+    'max-len': 130,
   },
 };

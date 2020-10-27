@@ -76,7 +76,7 @@ const PORT = process.env.PORT || 3000;
 
 const createAdminUser = require('./config/initDb');
 
-// createAdminUser();
+if (process.env.INITDB) createAdminUser();
 
 // Start server
 app.listen(PORT, () => {

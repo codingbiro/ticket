@@ -6,6 +6,7 @@ const MONGODB_URI = 'mongodb+srv://cluster0.rehfd.mongodb.net/ticket';
 
 mongoose.connect(MONGODB_URI, { user: 'vince', pass: 'vince', useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('useCreateIndex', true);
-mongoose.set('debug', true);
+
+console.log(1);
 
 module.exports = mongoose;
